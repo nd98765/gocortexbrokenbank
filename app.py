@@ -792,9 +792,9 @@ def parse_json():
     """Intentionally vulnerable JSON parser"""
     json_str = request.args.get('data', '')
     if json_str:
-        # Vulnerable: Using eval to parse JSON
         try:
-            result = eval(f"dict({json_str})")  # Dangerous eval usage
+            import json
+            result = json.loads(json_str)
             return f"JSON parsed: {result}"
         except Exception as e:
             return f"JSON error: {e}"
@@ -1151,13 +1151,10 @@ def config_injection():
     config_param = request.args.get('config', 'debug=true')
     # Vulnerable: Direct configuration parameter execution
     try:
-        # TRULY EXPLOITABLE: Dangerous exec() with code injection
         key = config_param.split('=')[0]
-        value_expr = config_param.split('=')[1]
-        exec(f"app.config['{key}'] = {value_expr}")
-        # Return computed value as PROOF of code execution
-        computed_value = app.config.get(key)
-        return f"Configuration updated: {key} = {computed_value} (computed from: {value_expr})"
+        value = config_param.split('=')[1]
+        app.config[key] = value
+        return f"Configuration updated: {key} = {value}"
     except Exception as e:
         return f"Configuration error with: {config_param} - {e}"
 
