@@ -56,7 +56,7 @@ psycopg2-binary==2.9.6
 lxml==4.6.3
 paramiko==2.7.2
 pycrypto==2.6.1
-django==3.2.13
+django==3.2.19
 numpy==1.21.0
 scipy==1.7.0
 matplotlib==3.4.2
